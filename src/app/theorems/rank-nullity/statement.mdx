@@ -1,0 +1,16 @@
+For a linear map $T: \mathbb{R}^n \to \mathbb{R}^m$,
+
+$$
+\dim \ker(T) + \dim \mathrm{im}(T) = n.
+$$
+
+The **null space** $\ker(T)$ is the set of input vectors that $T$ sends to zero.
+The **column space** $\mathrm{im}(T)$ is everything $T$ can output. The theorem
+says these two dimensions always sum to the dimension of the input space — no
+matter how degenerate $T$ is, what it loses in the null space it preserves in
+the image.
+
+Try editing $M$ in the bottom-right panel. As you change entries, watch the
+**yellow null space** in the domain and the **blue column space** in the codomain
+breathe in opposite directions: making $M$ more degenerate grows the null space
+and shrinks the column space, but their sum stays equal to $n$.

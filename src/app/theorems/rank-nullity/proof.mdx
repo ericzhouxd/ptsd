@@ -1,0 +1,26 @@
+Let $\{v_1, \dots, v_k\}$ be a basis of $\ker(T)$, where $k = \dim \ker(T)$.
+Extend it to a basis $\{v_1, \dots, v_k, v_{k+1}, \dots, v_n\}$ of $\mathbb{R}^n$.
+
+We claim $\{T(v_{k+1}), \dots, T(v_n)\}$ is a basis of $\mathrm{im}(T)$.
+
+**Spanning.** Any $w \in \mathrm{im}(T)$ has a preimage $v = \sum_{i=1}^n c_i v_i$.
+Apply $T$:
+$$
+w = T(v) = \sum_{i=1}^n c_i T(v_i) = \sum_{i=k+1}^n c_i T(v_i),
+$$
+since $T(v_i) = 0$ for $i \le k$. So $\{T(v_{k+1}), \dots, T(v_n)\}$ spans $\mathrm{im}(T)$.
+
+**Linear independence.** Suppose $\sum_{i=k+1}^n a_i T(v_i) = 0$. Then
+$T\left(\sum_{i=k+1}^n a_i v_i\right) = 0$, so $\sum_{i=k+1}^n a_i v_i \in \ker(T)$.
+Since $\{v_1, \dots, v_k\}$ is a basis of $\ker(T)$, there exist $b_j$ with
+$\sum_{i=k+1}^n a_i v_i = \sum_{j=1}^k b_j v_j$, i.e.
+$$
+\sum_{j=1}^k b_j v_j - \sum_{i=k+1}^n a_i v_i = 0.
+$$
+But $\{v_1, \dots, v_n\}$ is a basis of $\mathbb{R}^n$ — linearly independent —
+so all $b_j$ and $a_i$ are zero.
+
+**Conclusion.** $\dim \mathrm{im}(T) = n - k$, so
+$$
+\dim \ker(T) + \dim \mathrm{im}(T) = k + (n - k) = n. \qquad \blacksquare
+$$

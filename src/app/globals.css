@@ -1,0 +1,158 @@
+/**
+ * Global styles + Tailwind v4 theme.
+ *
+ * In Tailwind v4 there is NO `tailwind.config.ts` — the config lives here in
+ * CSS via the `@theme` directive. Every variable we declare under `@theme`
+ * becomes a Tailwind utility class:
+ *   --color-bg → `bg-bg`, `text-bg`, etc.
+ *   --color-yellow → `text-yellow`, `bg-yellow`, ...
+ *   --font-sans   → `font-sans`
+ *   --font-latex  → `font-latex`
+ *
+ * The values here MUST match `src/lib/theme.ts` (the JS-side palette used by
+ * Three.js scenes) — both files are populated from the same conceptual source
+ * of truth: the 3blue1brown-inspired palette.
+ *
+ * See LEARNING.md §"Tailwind CSS".
+ */
+@import "tailwindcss";
+
+@theme {
+  /* Background + foreground */
+  --color-bg: #0e1116;
+  --color-fg: #e6e8eb;
+  --color-fg-muted: #9aa3b2;
+
+  /* 3b1b-style accents (also referenced from Three.js via lib/theme.ts) */
+  --color-yellow: #ffd866;
+  --color-blue: #5b92e5;
+  --color-red: #e55b6a;
+  --color-green: #7cdb8a;
+
+  /* Grid + axes */
+  --color-grid: #3a4252;
+  --color-grid-dim: #222831;
+
+  /* Glass panel tokens */
+  --color-glass-bg: rgba(14, 17, 22, 0.55);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+
+  /* Font families.
+     `--font-inter` is injected by next/font/google in app/layout.tsx —
+     Inter is the UI/chrome font (buttons, controls, descriptions).
+     `--font-latex` is Computer Modern (KaTeX_Main, bundled with KaTeX) —
+     reserved for the site title, theorem titles, statements, proofs. */
+  --font-sans: var(--font-inter), "Inter", system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-latex: "KaTeX_Main", "Latin Modern Roman", "CMU Serif",
+    "Computer Modern", Cambria, Georgia, serif;
+}
+
+/* Site-wide defaults: dark, no light-mode toggle */
+html,
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  /* Stop iOS rubber-band scrolling from revealing white past fixed canvas */
+  overscroll-behavior: none;
+}
+
+/* Hide the native spin buttons on number inputs — the user can just type
+   (and matrix entries support negative numbers, so the +/- nudgers
+   contributed visual noise without adding much value). */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+/* Small frosted-glass panel — used for the floating control panel. */
+.glass {
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 16px;
+}
+
+/* Full-viewport "masked glass" wall — used for statement / proof overlays.
+   Heavier blur, multi-layer radial gradients (subtle accent tints), and a
+   noise overlay for the frosted texture. The noise is a data-URL SVG so we
+   don't fetch any extra assets. The combination of dim layer (in
+   TheoremBackground) + this wall gives the "clean background" feel — the
+   scene effectively disappears behind a textured glass surface.
+
+   Positioning is intentionally NOT set here. Consumers apply `absolute
+   inset-0` (or another positioning utility) to make the wall fill its
+   container. If we set `position: relative` here, Tailwind v4's utility
+   layer would lose to unlayered user CSS, and the wall would size to its
+   content instead of the viewport — leaving short statements with a
+   correspondingly short backdrop. The `::after` noise overlay's
+   `position: absolute` finds the wall as its positioned ancestor either
+   way. */
+.glass-wall {
+  background:
+    radial-gradient(ellipse 80% 60% at 25% 20%, rgba(255, 216, 102, 0.04), transparent 65%),
+    radial-gradient(ellipse 70% 55% at 75% 80%, rgba(91, 146, 229, 0.04), transparent 65%),
+    rgba(14, 17, 22, 0.78);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  isolation: isolate;
+}
+
+.glass-wall::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  z-index: 0;
+}
+
+/* Prose inside theorem overlays — uses the LaTeX font (Computer Modern) so
+   prose and inline math share the same typographic voice. Generous line
+   height; tracking handled per-heading. Body bumped to 1.15rem for a more
+   comfortable reading size on the wall (KaTeX inline math scales with parent
+   font-size). */
+.prose-theorem {
+  max-width: 68ch;
+  line-height: 1.75;
+  font-family: var(--font-latex);
+  font-size: 1.15rem;
+}
+.prose-theorem h1,
+.prose-theorem h2,
+.prose-theorem h3 {
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+.prose-theorem h1 {
+  font-size: 2.75rem;
+  margin-bottom: 1.5rem;
+}
+.prose-theorem h2 {
+  font-size: 1.875rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+.prose-theorem p {
+  margin: 0.85rem 0;
+}
+.prose-theorem strong {
+  color: var(--color-yellow);
+  font-weight: 600;
+}
+
+/* KaTeX display blocks: a touch of breathing room above/below */
+.prose-theorem .katex-display {
+  margin: 1.4rem 0;
+}
