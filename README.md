@@ -1,6 +1,6 @@
 # Proven Theorems Simply Demonstrated
 
-A web app that pairs mathematical theorems with live, interactive geometric demonstrations in the spirit of 3blue1brown. Each entry has the formal statement and proof in LaTeX alongside a draggable, zoomable 3D scene you can play with.
+A web app that pairs mathematical theorems with live, interactive geometric demonstrations in the spirit of 3Blue1Brown. Each entry has the formal statement and proof in LaTeX alongside a draggable, zoomable 3D scene.
 
 ## Quick start
 
@@ -29,7 +29,7 @@ The page has three modes — **Statement / Scene / Proof** — switched via the 
 
 ## Learning the codebase
 
-If you're new to any of these libraries, read [LEARNING.md](./LEARNING.md) first. It's a tour organized by concept, not by file — each section is ≤ 300 words and points at one concrete example file in the codebase.
+If you're new to any of these libraries, read [LEARNING.md](./LEARNING.md) first.
 
 ## Project layout
 
@@ -74,19 +74,6 @@ npm run build    # production build (typechecks + bundles)
 npm run start    # serve the production build locally
 npm run lint     # eslint
 ```
-
-## Deploy
-
-Designed for **Vercel** (it's a stock Next.js 16 app — no custom server, no env vars, no DB).
-
-1. Push this repo to GitHub.
-2. Go to [vercel.com/new](https://vercel.com/new) → import the GitHub repo.
-3. Vercel auto-detects the Next.js framework. No configuration needed — leave build/output defaults.
-4. Click **Deploy**. First deploy takes ~1–2 minutes.
-
-After that, every push to `main` auto-deploys to production, and every PR gets its own preview URL.
-
-Other hosts that work out of the box: any Node 20+ environment that can run `next build` then `next start`. For static-only hosts, `next export` won't work here — the page uses dynamic client components (the r3f scene), which Next handles fine via SSR fallback but requires a Node runtime.
 
 ## License
 
